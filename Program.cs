@@ -4,6 +4,7 @@ using System.Threading;
 
 class Program
 {
+
     static List<string> playerDeck = new List<string>();
     static List<string> playerHand = new List<string>();
     static List<string> enemyDeck = new List<string>();
@@ -124,7 +125,7 @@ class Program
         }
     }
 
-    static string GetCardDescription(string cardName)
+    /*static string GetCardDescription(string cardName)
     {
         // Long if-else chain for card descriptions
         if (cardName == "FireballCard")
@@ -138,7 +139,7 @@ class Program
         else if (cardName == "PowerUpCard")
             return "Power Up (Costs 30 mana): Gain fire buff for 2 turns";
         return "Unknown Card";
-    }
+    }*/
 
     static void PlayTurn(bool isPlayer)
     {
@@ -411,216 +412,6 @@ public abstract class Card
     public abstract string GetCardDescription(string cardName);
 
     public abstract void PlayCard(string cardName, bool isPlayer);
-    {
-        // Huge if-else chain for card effects
-        if (cardName == "FireballCard")
-        {
-            if (isPlayer)
-            {
-                if (playerMana >= 30)
-                {
-                    int damage = 40;
-                    if (playerHasFireBuff) damage *= 2;
-                    if (enemyHasIceShield) damage /= 2;
-
-                    if (enemyShield > 0)
-                    {
-                        if (enemyShield >= damage)
-                        {
-                            enemyShield -= damage;
-                            damage = 0;
-                        }
-                        else
-                        {
-                            damage -= enemyShield;
-                            enemyShield = 0;
-                        }
-                    }
-
-                    enemyHealth -= damage;
-                    playerMana -= 30;
-                    Console.WriteLine($"Player casts Fireball for {damage} damage!");
-                }
-                else
-                {
-                    Console.WriteLine("Not enough mana!");
-                    return;
-                }
-            }
-            else
-            {
-                if (enemyMana >= 30)
-                {
-                    int damage = 40;
-                    if (enemyHasFireBuff) damage *= 2;
-                    if (playerHasIceShield) damage /= 2;
-
-                    if (playerShield > 0)
-                    {
-                        if (playerShield >= damage)
-                        {
-                            playerShield -= damage;
-                            damage = 0;
-                        }
-                        else
-                        {
-                            damage -= playerShield;
-                            playerShield = 0;
-                        }
-                    }
-
-                    playerHealth -= damage;
-                    enemyMana -= 30;
-                    Console.WriteLine($"Enemy casts Fireball for {damage} damage!");
-                }
-                else return;
-            }
-        }
-        else if (cardName == "IceShieldCard")
-        {
-            if (isPlayer)
-            {
-                if (playerMana >= 20)
-                {
-                    playerShield += 30;
-                    playerHasIceShield = true;
-                    playerMana -= 20;
-                    Console.WriteLine("Player gains Ice Shield!");
-                }
-                else
-                {
-                    Console.WriteLine("Not enough mana!");
-                    return;
-                }
-            }
-            else
-            {
-                if (enemyMana >= 20)
-                {
-                    enemyShield += 30;
-                    enemyHasIceShield = true;
-                    enemyMana -= 20;
-                    Console.WriteLine("Enemy gains Ice Shield!");
-                }
-                else return;
-            }
-        }
-        else if (cardName == "HealCard")
-        {
-            if (isPlayer)
-            {
-                if (playerMana >= 40)
-                {
-                    playerHealth = Math.Min(100, playerHealth + 40);
-                    playerMana -= 40;
-                    Console.WriteLine("Player heals 40 health!");
-                }
-                else
-                {
-                    Console.WriteLine("Not enough mana!");
-                    return;
-                }
-            }
-            else
-            {
-                if (enemyMana >= 40)
-                {
-                    enemyHealth = Math.Min(100, enemyHealth + 40);
-                    enemyMana -= 40;
-                    Console.WriteLine("Enemy heals 40 health!");
-                }
-                else return;
-            }
-        }
-        else if (cardName == "SlashCard")
-        {
-            if (isPlayer)
-            {
-                if (playerMana >= 20)
-                {
-                    int damage = 20;
-                    if (playerHasFireBuff) damage *= 2;
-
-                    if (enemyShield > 0)
-                    {
-                        if (enemyShield >= damage)
-                        {
-                            enemyShield -= damage;
-                            damage = 0;
-                        }
-                        else
-                        {
-                            damage -= enemyShield;
-                            enemyShield = 0;
-                        }
-                    }
-
-                    enemyHealth -= damage;
-                    playerMana -= 20;
-                    Console.WriteLine($"Player slashes for {damage} damage!");
-                }
-                else
-                {
-                    Console.WriteLine("Not enough mana!");
-                    return;
-                }
-            }
-            else
-            {
-                if (enemyMana >= 20)
-                {
-                    int damage = 20;
-                    if (enemyHasFireBuff) damage *= 2;
-
-                    if (playerShield > 0)
-                    {
-                        if (playerShield >= damage)
-                        {
-                            playerShield -= damage;
-                            damage = 0;
-                        }
-                        else
-                        {
-                            damage -= playerShield;
-                            playerShield = 0;
-                        }
-                    }
-
-                    playerHealth -= damage;
-                    enemyMana -= 20;
-                    Console.WriteLine($"Enemy slashes for {damage} damage!");
-                }
-                else return;
-            }
-        }
-        else if (cardName == "PowerUpCard")
-        {
-            if (isPlayer)
-            {
-                if (playerMana >= 30)
-                {
-                    playerHasFireBuff = true;
-                    playerMana -= 30;
-                    Console.WriteLine("Player gains Fire Buff!");
-                }
-                else
-                {
-                    Console.WriteLine("Not enough mana!");
-                    return;
-                }
-            }
-            else
-            {
-                if (enemyMana >= 30)
-                {
-                    enemyHasFireBuff = true;
-                    enemyMana -= 30;
-                    Console.WriteLine("Enemy gains Fire Buff!");
-                }
-                else return;
-            }
-        }
-    }
 }
 
 public class FireballCard : Card
@@ -632,7 +423,66 @@ public class FireballCard : Card
 
     public override void PlayCard(string cardName, bool isPlayer)
     {
+        if (isPlayer)
+        {
+            if (playerMana >= 30)
+            {
+                int damage = 40;
+                if (playerHasFireBuff) damage *= 2;
+                if (enemyHasIceShield) damage /= 2;
 
+                if (enemyShield > 0)
+                {
+                    if (enemyShield >= damage)
+                    {
+                        enemyShield -= damage;
+                        damage = 0;
+                    }
+                    else
+                    {
+                        damage -= enemyShield;
+                        enemyShield = 0;
+                    }
+                }
+
+                enemyHealth -= damage;
+                playerMana -= 30;
+                Console.WriteLine($"Player casts Fireball for {damage} damage!");
+            }
+            else
+            {
+                Console.WriteLine("Not enough mana!");
+                return;
+            }
+        }
+        else
+        {
+            if (enemyMana >= 30)
+            {
+                int damage = 40;
+                if (enemyHasFireBuff) damage *= 2;
+                if (playerHasIceShield) damage /= 2;
+
+                if (playerShield > 0)
+                {
+                    if (playerShield >= damage)
+                    {
+                        playerShield -= damage;
+                        damage = 0;
+                    }
+                    else
+                    {
+                        damage -= playerShield;
+                        playerShield = 0;
+                    }
+                }
+
+                playerHealth -= damage;
+                enemyMana -= 30;
+                Console.WriteLine($"Enemy casts Fireball for {damage} damage!");
+            }
+            else return;
+        }
     }
 }
 
@@ -645,7 +495,32 @@ public class IceShieldCard : Card
 
     public override void PlayCard(string cardName, bool isPlayer)
     {
-
+        if (isPlayer)
+        {
+            if (playerMana >= 20)
+            {
+                playerShield += 30;
+                playerHasIceShield = true;
+                playerMana -= 20;
+                Console.WriteLine("Player gains Ice Shield!");
+            }
+            else
+            {
+                Console.WriteLine("Not enough mana!");
+                return;
+            }
+        }
+        else
+        {
+            if (enemyMana >= 20)
+            {
+                enemyShield += 30;
+                enemyHasIceShield = true;
+                enemyMana -= 20;
+                Console.WriteLine("Enemy gains Ice Shield!");
+            }
+            else return;
+        }
     }
 }
 
@@ -658,7 +533,30 @@ public class HealCard : Card
 
     public override void PlayCard(string cardName, bool isPlayer)
     {
-
+        if (isPlayer)
+        {
+            if (playerMana >= 40)
+            {
+                playerHealth = Math.Min(100, playerHealth + 40);
+                playerMana -= 40;
+                Console.WriteLine("Player heals 40 health!");
+            }
+            else
+            {
+                Console.WriteLine("Not enough mana!");
+                return;
+            }
+        }
+        else
+        {
+            if (enemyMana >= 40)
+            {
+                enemyHealth = Math.Min(100, enemyHealth + 40);
+                enemyMana -= 40;
+                Console.WriteLine("Enemy heals 40 health!");
+            }
+            else return;
+        }
     }
 }
 
@@ -670,7 +568,64 @@ public class SlashCard : Card
     }
     public override void PlayCard(string cardName, bool isPlayer)
     {
+        if (isPlayer)
+        {
+            if (playerMana >= 20)
+            {
+                int damage = 20;
+                if (playerHasFireBuff) damage *= 2;
 
+                if (enemyShield > 0)
+                {
+                    if (enemyShield >= damage)
+                    {
+                        enemyShield -= damage;
+                        damage = 0;
+                    }
+                    else
+                    {
+                        damage -= enemyShield;
+                        enemyShield = 0;
+                    }
+                }
+
+                enemyHealth -= damage;
+                playerMana -= 20;
+                Console.WriteLine($"Player slashes for {damage} damage!");
+            }
+            else
+            {
+                Console.WriteLine("Not enough mana!");
+                return;
+            }
+        }
+        else
+        {
+            if (enemyMana >= 20)
+            {
+                int damage = 20;
+                if (enemyHasFireBuff) damage *= 2;
+
+                if (playerShield > 0)
+                {
+                    if (playerShield >= damage)
+                    {
+                        playerShield -= damage;
+                        damage = 0;
+                    }
+                    else
+                    {
+                        damage -= playerShield;
+                        playerShield = 0;
+                    }
+                }
+
+                playerHealth -= damage;
+                enemyMana -= 20;
+                Console.WriteLine($"Enemy slashes for {damage} damage!");
+            }
+            else return;
+        }
     }
 
 }
@@ -683,7 +638,30 @@ public class PowerUpCard : Card
     }
     public override void PlayCard(string cardName, bool isPlayer)
     {
-
+        if (isPlayer)
+        {
+            if (playerMana >= 30)
+            {
+                playerHasFireBuff = true;
+                playerMana -= 30;
+                Console.WriteLine("Player gains Fire Buff!");
+            }
+            else
+            {
+                Console.WriteLine("Not enough mana!");
+                return;
+            }
+        }
+        else
+        {
+            if (enemyMana >= 30)
+            {
+                enemyHasFireBuff = true;
+                enemyMana -= 30;
+                Console.WriteLine("Enemy gains Fire Buff!");
+            }
+            else return;
+        }
     }
 }
 
